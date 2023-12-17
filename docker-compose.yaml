@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  client:
+    build:
+      context: ./client
+    ports:
+      - "5000:3000"
+    depends_on:
+      - server
+  server:
+    build:
+      context: ./server
+    container_name: server 
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+  database:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'store'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
